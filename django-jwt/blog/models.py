@@ -17,4 +17,8 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+class Image(models.Model):
+    
+    postId=models.ForeignKey(Post,on_delete=models.CASCADE)
+    image=models.ImageField()
 
