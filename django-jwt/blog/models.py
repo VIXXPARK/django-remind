@@ -18,7 +18,6 @@ class Post(models.Model):
         return self.title
 
 class Image(models.Model):
-    
     postId=models.ForeignKey(Post,on_delete=models.CASCADE)
     image=models.ImageField()
 
