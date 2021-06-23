@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-import os,json
+import os
+import json
 from django.core.exceptions import ImproperlyConfigured
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,15 +20,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-secret_file = os.path.join(BASE_DIR,"secrets.json")
+secret_file = os.path.join(BASE_DIR, "secrets.json")
 with open(secret_file) as f:
-    secrets=json.loads(f.read())
-def get_scret(setting,secrets=secrets):
+    secrets = json.loads(f.read())
+
+
+def get_scret(setting, secrets=secrets):
     try:
         return secrets[setting]
     except:
         error_msg = "Set the {0} environment variable".format(setting)
         raise ImproperlyConfigured(error_msg)
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_scret('SECRET_KEY')
 
@@ -48,7 +53,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'myuser.apps.MyuserConfig',
-    'rest_framework_simplejwt'
+    'rest_framework_simplejwt',
+    'blog.apps.BlogConfig'
 ]
 
 MIDDLEWARE = [
@@ -139,7 +145,10 @@ AUTH_USER_MODEL = 'myuser.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES':{
-        'rest_framework_simplejwt.authentication.JWTAuthentication'
-    }
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ),
 }
