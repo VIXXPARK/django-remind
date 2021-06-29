@@ -6,6 +6,9 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from .serializers import getCodeSerializer, getOAuthSerializer
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
+import json
 CODE = ""
 
 
@@ -46,11 +49,25 @@ def getTokenOAuth(request):
         print("CODE", CODE)
         res = {
             'grant_type': 'authorization_code',
-            'client_code': SOCIAL_OUTH_CONFIG['KAKAO_REST_API_KEY'],
+            'client_id': SOCIAL_OUTH_CONFIG['KAKAO_REST_API_KEY'],
             'redirect_url': SOCIAL_OUTH_CONFIG['KAKAO_REDIRECT_URI'],
             'client_secret': SOCIAL_OUTH_CONFIG['KAKAO_SECRET_KEY'],
             'code': CODE
         }
-        print("data : ", res)
-        response = requests.post(url=url,data=res)
-        return Response(response.text)
+        print(res)
+        headers = {
+            'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+        }
+        response = requests.post(url, data=res, headers=headers)
+        print("응답에 대한 결과 : ", response.text)
+        print(type(response.text))
+        tokenJson = response.json()
+        userUrl = "https://kapi.kakao.com/v2/user/me"
+        auth = "Bearer "+tokenJson['access_token']
+        HEADER={
+            "Authorization": auth,
+            "Content-type": "application/x-www-form-urlencoded;charset=utf-8"
+        }
+        print(HEADER)
+        res = requests.get(userUrl,headers=HEADER)
+        return Response(res.text)
