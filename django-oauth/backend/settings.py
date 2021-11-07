@@ -19,6 +19,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
+"""
+json 파일을 만드시고 형태는
+{
+    "SECRET_KEY" : "====",
+    "KAKAO_REST_API_KEY": "REST API KEY",
+    "KAKAO_REDIRECT_URI": "REDIRECT URL",
+    "KAKAO_SECRET_KEY": "SECRET KEY"
+}
+"""
 secret_file = os.path.join(BASE_DIR, "secrets.json")
 secrets = None
 with open(secret_file) as f:
