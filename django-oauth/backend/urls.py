@@ -16,9 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
-from accounts.views import getUserInfo
+from accounts.views import get_user_info
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('accounts.urls')),
-    path('accounts/kakao/login/callback/', getUserInfo),
+    path('accounts/kakao/login/callback/', get_user_info),
 ]
