@@ -1,0 +1,33 @@
+version: '3.3'
+
+services:
+  postgres1:
+    container_name: primary-db
+    image: postgres:13.4
+    restart: unless-stopped
+    ports:
+      - "35432:5432"
+    environment:
+      POSTGRES_DB: "primary_db"
+      POSTGRES_HOST_AUTH_METHOD: "md5"
+      POSTGRES_PASSWORD: "primarydb"
+      POSTGRES_USER: "primary_user"
+    volumes:
+      - default-db:/var/lib/postgresql/data
+  postgres2:
+    container_name: log-db
+    image: postgres:13.4
+    restart: unless-stopped
+    ports:
+      - "45432:5432"
+    environment:
+      POSTGRES_DB: "log_db"
+      POSTGRES_HOST_AUTH_METHOD: "md5"
+      POSTGRES_PASSWORD: "logdb"
+      POSTGRES_USER: "log_user"
+    volumes:
+      - log-db:/var/lib/postgresql/data
+
+volumes:
+  default-db:
+  log-db:

@@ -41,4 +41,5 @@ def get_user_info(reqeust):
         "Content-type": "application/x-www-form-urlencoded;charset=utf-8"
     }
     res = requests.get(user_url, headers=HEADER)
+    print(response.json())
     return Response(res.text)
