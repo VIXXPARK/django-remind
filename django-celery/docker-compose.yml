@@ -1,0 +1,25 @@
+version: "3.3"
+
+services:
+  django:
+    build: ./Batch
+    container_name: django
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+    - "8000:8000"
+
+  worker:
+    container_name: worker
+    restart: always
+    build: ./Batch
+    command: celery -A batch worker --loglevel=DEBUG -P prefork -f celery.logs
+    volumes:
+      - ./Batch:/srv/code
+
+  beat:
+    build: ./Batch
+    container_name: beat
+    command: celery -A batch beat -l info
+    depends_on:
+      - worker
+
