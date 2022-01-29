@@ -1,0 +1,13 @@
+version: '3.3'
+
+services:
+  test_db:
+    container_name: test-postgres
+    image: vixx170627/postgres-ko
+    restart: unless-stopped
+    ports:
+      - "5431:5432"
+    env_file:
+      - .env
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
